@@ -9,5 +9,8 @@
 ## Features
 
 	### Login
+	![User login script](screenshots/login.png)
 	### Dashboard
+	![User dashboard script](screenshots/dashboard.png)
 	### Management
+	![User management script](screenshots/AccountManagement.png)
