@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'application.user_management'
+version '1.0.0'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':service.management.interfaces')
+    implementation project(':domain')
+    implementation project(':infrastructure.repository')
+    implementation group: 'org.springframework', name: 'spring-context', version: '5.1.1.RELEASE'
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.1.1.RELEASE'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+ext.moduleName = 'service.management'

@@ -1,0 +1,78 @@
+plugins {
+	id 'java'
+	id "org.sonarqube" version "2.6"
+}
+
+subprojects {
+	afterEvaluate {
+		compileJava {
+			inputs.property("moduleName", moduleName)
+			doFirst {
+				options.compilerArgs = [
+						'--module-path', classpath.asPath,
+				]
+				classpath = files()
+			}
+		}
+		compileTestJava {
+			inputs.property("moduleName", moduleName)
+			doFirst {
+				options.compilerArgs = [
+						'--module-path', classpath.asPath,
+						'--add-modules', 'junit',
+						'--add-reads', "$moduleName=junit",
+						'--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+				]
+				classpath = files()
+			}
+		}
+
+		test {
+			inputs.property("moduleName", moduleName)
+			doFirst {
+				jvmArgs = [
+						'--module-path', classpath.asPath,
+						'--add-modules', 'ALL-MODULE-PATH',
+						'--add-reads', "$moduleName=junit",
+						'--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+				]
+				classpath = files()
+			}
+		}
+	}
+}
+
+ext.moduleName = 'application.user_management'
+
+group 'application.user_management'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: '2.1.0.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.0.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.0.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.1.0.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: '2.1.0.RELEASE'
+	implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.12'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.1.0.RELEASE'
+	implementation group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.0.RELEASE'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.6.RELEASE'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
+
+	implementation project(':infrastructure.repository')
+	implementation project(':domain')
+	implementation project(':application.auth')
+	implementation project(':application.management')
+	implementation project(':service.auth')
+	implementation project(':application.config')
+}

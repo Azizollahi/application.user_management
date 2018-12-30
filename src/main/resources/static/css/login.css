@@ -1,0 +1,12 @@
+.midContainer{
+	width: max-content;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
